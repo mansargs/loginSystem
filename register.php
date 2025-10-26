@@ -47,7 +47,7 @@ if ($check->num_rows > 0) {
 }
 $check->close();
 
-$stmt = $conn->prepare('INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, 1, NULL, NOW())');
+$stmt = $conn->prepare('INSERT INTO users (username, email, password_hash, created_at) VALUES (?, ?, ?, NOW())');
 $stmt->bind_param('sss', $username, $email, $password_hash);
 if ($stmt->execute() === TRUE) {
     $safeUser = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');

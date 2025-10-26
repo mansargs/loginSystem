@@ -14,7 +14,7 @@ if ($username === '' || $password === '') {
 }
 
 $conn = get_db_connection();
-$stmt = $conn->prepare('SELECT id, username, email, password_hash, is_verified FROM users WHERE username = ? LIMIT 1');
+$stmt = $conn->prepare('SELECT id, username, email FROM users WHERE username = ? LIMIT 1');
 $stmt->bind_param('s', $username);
 $stmt->execute();
 $result = $stmt->get_result();
