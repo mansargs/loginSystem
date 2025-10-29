@@ -2,7 +2,7 @@
 require_once __DIR__ . '/config.php';
 
 if (!isset($_GET['token']) || empty($_GET['token'])) {
-    $_SESSION['flash_error'] = '<script>alert(Invalid verification link.)</script>';
+    $_SESSION['error'] = '<script>alert(Invalid verification link.)</script>';
     header('Location: login.php');
     exit;
 }

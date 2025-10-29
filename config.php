@@ -1,15 +1,14 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Dotenv\Dotenv;  // Ensure this line is present and exact
+use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable(__DIR__);  // Line ~9: This should now work
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// Dynamically set BASE_URL if not set (includes port from HTTP_HOST)
 if (empty($_ENV['BASE_URL'])) {
     $_ENV['BASE_URL'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 }
@@ -18,7 +17,7 @@ function get_db_connection() {
     $conn = new mysqli($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
     if ($conn->connect_error) {
         error_log('DB Connection Error: ' . $conn->connect_error);
-        $_SESSION['flash_error'] = 'Internal server error. Please try again later.';
+        $_SESSION['error'] = 'Internal server error. Please try again later.';
         header('Location: login.php');
         exit();
     }
@@ -35,7 +34,7 @@ function send_verification_email($email, $username, $token) {
         $mail->Username = $_ENV['EMAIL_USER'];
         $mail->Password = $_ENV['EMAIL_PASS'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;  // Use 465 + ENCRYPTION_SMTPS for SSL in prod
+        $mail->Port = 587;
 
         $mail->setFrom($_ENV['EMAIL_USER'], 'LoginSystem');
         $mail->addAddress($email, $username);
@@ -59,7 +58,6 @@ function send_verification_email($email, $username, $token) {
     }
 }
 
-// CSRF Token functions
 function generate_csrf_token() {
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));

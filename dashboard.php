@@ -6,17 +6,17 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-session_regenerate_id(true);  // Refresh on each load
+session_regenerate_id(true);
 
 $username = htmlspecialchars($_SESSION['username'] ?? '');
 
 $flash = '';
-if (isset($_SESSION['reg_success'])) {
-    $flash = '<p style="color: green;">' . htmlspecialchars($_SESSION['reg_success']) . '</p>';
-    unset($_SESSION['reg_success']);
-} elseif (isset($_SESSION['flash_error'])) {
-    $flash = '<p style="color: red;">' . htmlspecialchars($_SESSION['flash_error']) . '</p>';
-    unset($_SESSION['flash_error']);
+if (isset($_SESSION['success'])) {
+    $flash = '<p style="color: green;">' . htmlspecialchars($_SESSION['success']) . '</p>';
+    unset($_SESSION['success']);
+} elseif (isset($_SESSION['error'])) {
+    $flash = '<p style="color: red;">' . htmlspecialchars($_SESSION['error']) . '</p>';
+    unset($_SESSION['error']);
 }
 ?>
 <!DOCTYPE html>

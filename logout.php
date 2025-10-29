@@ -11,7 +11,7 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-unset($_SESSION['flash_error'], $_SESSION['reg_success']);  // Clear any flashes
+unset($_SESSION['flash_error'], $_SESSION['reg_success']);
 
 header('Location: login.php');
 exit;

@@ -1,16 +1,11 @@
 <?php
 require_once __DIR__ . '/config.php';
-generate_csrf_token();  // For form
+generate_csrf_token();
 
 $flash = '';
-if (isset($_SESSION['flash_error'])) {
-    $flash = '<p style="color: red;">' . ($_SESSION['flash_error']) . '</p>';
-    unset($_SESSION['flash_error']);
-} elseif (isset($_SESSION['login_error'])) {
-    $flash = '<p style="color: red;">' . ($_SESSION['login_error']) . '</p>';
-    unset($_SESSION['login_error']);
-echo $flash;
-$flash = '';
+if(isset($_SERVER['alert'])) {
+    echo $_SERVER['alert'];
+    unset($_SERVER['alert']);
 }
 ?>
 <!DOCTYPE html>
@@ -22,8 +17,7 @@ $flash = '';
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form action="login_handler.php" method="post" id="login-form">  <!-- Separate handler for clarity -->
-        <!-- <?php echo $flash; ?> -->
+    <form action="login_handler.php" method="post" id="login-form">
         <input type="text" id="username" name="username" placeholder="Username" required>
         <input type="password" id="password" name="password" placeholder="Password" required>
         <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">

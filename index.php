@@ -1,14 +1,11 @@
 <?php
-session_start();
+// session_start();
 require_once __DIR__ . '/config.php';
 generate_csrf_token();
-
-// if (isset($_SESSION['alert'])) {
-//     $flash = '<p style="color: ' . ($_SESSION['alert_type'] ?? 'info') . ';">' . htmlspecialchars($_SESSION['alert']) . '</p>';
-//     unset($_SESSION['alert'], $_SESSION['alert_type']);
-// } else {
-//     $flash = '';
-// }
+if(isset($_SERVER['alert'])) {
+    echo $_SERVER['alert'];
+    unset($_SERVER['alert']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
