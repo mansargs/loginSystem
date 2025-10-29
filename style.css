@@ -26,20 +26,23 @@ form:hover {
 input {
     width: 100%;
     padding: 12px 15px;
-    margin: 12px -15px;
+    margin: 12px 0;  /* FIXED: Removed negative margin for better spacing */
     border: 2px solid #d1c4e9;
     border-radius: 12px;
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
 input[type="submit"] {
 	background: #7e57c2;
 	color: #fff;
 	border: none;
 	cursor: pointer;
 	font-weight: bold;
-	margin-left: 5px;
+	padding: 12px;  /* NEW: Consistent padding */
+	margin: 12px 0 0 0;  /* FIXED: Proper margin */
+	border-radius: 12px;
 }
 
 input:focus {

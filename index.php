@@ -1,0 +1,27 @@
+<?php
+session_start();
+if (isset($_SESSION['alert'])) {
+    echo "<script>alert('" . addslashes($_SESSION['alert']) . "');</script>";
+    unset($_SESSION['alert']);
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<form action="register.php" method="post" id="reg-form">
+		<input type="text" id="username" name="username" placeholder="Username" required>
+		<input type="email" name="email" id="email" placeholder="Email" required>
+		<input type="password" id="password" name="password" placeholder="Password" required>
+		<input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+		<input type="submit" value="Register">
+		<a href="login.html">Already have an account? Login here</a>
+	</form>
+</body>
+</html>

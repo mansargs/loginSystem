@@ -7,6 +7,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $username = htmlspecialchars($_SESSION['username'] ?? '');
+
+$flash = '';
+if (isset($_SESSION['reg_success'])) {
+	$flash = '<p style="color: green;">' . htmlspecialchars($_SESSION['reg_success']) . '</p>';
+	unset($_SESSION['reg_success']);
+} elseif (isset($_SESSION['reg_error'])) {
+	$flash = '<p style="color: red;">' . htmlspecialchars($_SESSION['reg_error']) . '</p>';
+	unset($_SESSION['reg_error']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,11 +26,10 @@ $username = htmlspecialchars($_SESSION['username'] ?? '');
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<form>
+	<div style="display: flex; flex-direction: column; align-items: center; padding: 50px;">
 		<h3>Welcome, <?php echo $username; ?></h3>
+		<?php echo $flash; ?>
 		<a href="logout.php">Logout</a>
-	</form>
+	</div>
 </body>
 </html>
-
-
