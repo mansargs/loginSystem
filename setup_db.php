@@ -7,7 +7,7 @@ if ($serverConn->connect_error) {
 }
 
 $dbExisted = false;
-$checkDbSql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$_ENV[DB_NAME]'";
+$checkDbSql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{$_ENV['DB_NAME']}'";
 $checkDbRes = $serverConn->query($checkDbSql);
 
 if ($checkDbRes) {
@@ -15,13 +15,13 @@ if ($checkDbRes) {
     $checkDbRes->free();
 }
 
-$createDbSql = "CREATE DATABASE IF NOT EXISTS `$_ENV[DB_NAME]` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";
+$createDbSql = "CREATE DATABASE IF NOT EXISTS `{$_ENV['DB_NAME']}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci";  // Fixed: Proper interpolation
 if (!$serverConn->query($createDbSql)) {
     $serverConn->close();
     die('Failed to create database: ' . $serverConn->error);
 }
 
-echo $dbExisted ? "Database '$_ENV[DB_NAME]' already exists.\n" : "Database '$_ENV[DB_NAME]' created successfully.\n";
+echo $dbExisted ? "Database '{$_ENV['DB_NAME']}' already exists.\n" : "Database '{$_ENV['DB_NAME']}' created successfully.\n";
 
 $conn = new mysqli($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
 if ($conn->connect_error) {
@@ -32,7 +32,7 @@ $conn->set_charset('utf8mb4');
 
 $tableExisted = false;
 $checkTableSql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-                  WHERE TABLE_SCHEMA = '$_ENV[DB_NAME]' AND TABLE_NAME = 'users'";
+                  WHERE TABLE_SCHEMA = '{$_ENV['DB_NAME']}' AND TABLE_NAME = 'users'";
 $checkTableRes = $conn->query($checkTableSql);
 
 if ($checkTableRes) {
@@ -61,3 +61,7 @@ if (!$conn->query($createTableSql)) {
 
 echo $tableExisted ? "Table 'users' already exists.\n" : "Table 'users' created successfully.\n";
 
+$conn->close();
+$serverConn->close();
+echo "Setup complete!\n";
+?>

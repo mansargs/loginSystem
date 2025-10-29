@@ -1,14 +1,15 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Dotenv\Dotenv;  // Ensure this line is present and exact
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);  // Line ~9: This should now work
 $dotenv->load();
 
-// Dynamically set BASE_URL if not set
+// Dynamically set BASE_URL if not set (includes port from HTTP_HOST)
 if (empty($_ENV['BASE_URL'])) {
     $_ENV['BASE_URL'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 }
@@ -31,8 +32,8 @@ function send_verification_email($email, $username, $token) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['EMAIL_USER'];  // Fixed: Direct $_ENV access
-        $mail->Password = $_ENV['EMAIL_PASS'];  // Fixed: Direct $_ENV access
+        $mail->Username = $_ENV['EMAIL_USER'];
+        $mail->Password = $_ENV['EMAIL_PASS'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;  // Use 465 + ENCRYPTION_SMTPS for SSL in prod
 
@@ -41,7 +42,7 @@ function send_verification_email($email, $username, $token) {
 
         $mail->isHTML(true);
         $mail->Subject = 'Verify Your Email Address';
-        $verificationLink = $_ENV['BASE_URL'] . '/verify.php?token=' . $token;  // Fixed: Direct $_ENV
+        $verificationLink = $_ENV['BASE_URL'] . '/verify.php?token=' . $token;
         $mail->Body = "
             <h2>Welcome, $username!</h2>
             <p>Please click the link below to verify your email:</p>
