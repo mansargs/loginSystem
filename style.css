@@ -4,7 +4,7 @@ body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 
 .container {
     max-width: 400px;
     margin: 0 auto;
-    background: white;
+    background: rgb(156, 133, 133);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -13,7 +13,7 @@ h2, h3 { text-align: center; }
 
 input, button { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
 
-button { background: #007bff; color: white; border: none; cursor: pointer; }
+button { background: #012852; color: white; border: none; cursor: pointer; }
 
 button:hover { background: #0056b3; }
 
@@ -30,7 +30,7 @@ button:hover { background: #0056b3; }
     color: #721c24; }
 
 a {
-    color: #007bff;
+    color: #012c5a;
     text-decoration: none; }
 
 a:hover { text-decoration: underline; }

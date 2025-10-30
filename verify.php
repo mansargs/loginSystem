@@ -10,7 +10,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
 $token = $_GET['token'];
 $conn = get_db_connection();
 
-$stmt = $conn->prepare('SELECT id, verified, created_at FROM users WHERE verification_token = ? AND verified = 0 LIMIT 1');
+$stmt = $conn->prepare('SELECT id, username, verified, created_at FROM users WHERE verification_token = ? AND verified = 0 LIMIT 1');
 $stmt->bind_param('s', $token);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -24,7 +24,6 @@ if (!$user) {
     exit;
 }
 
-// Check 24h expiry
 $created_at = new DateTime($user['created_at']);
 $now = new DateTime();
 if (($now->getTimestamp() - $created_at->getTimestamp()) > (24 * 60 * 60)) {
@@ -39,7 +38,6 @@ $update_stmt->bind_param('i', $user['id']);
 $update_stmt->execute();
 $update_stmt->close();
 
-// Auto-login after verification
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username']; // Fetch username separately if needed
 session_regenerate_id(true);

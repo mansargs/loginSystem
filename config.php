@@ -10,7 +10,9 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 if (empty($_ENV['BASE_URL'])) {
-    $_ENV['BASE_URL'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $_ENV['BASE_URL'] = $protocol . '://' . $host;
 }
 
 session_start();
@@ -21,7 +23,6 @@ function get_db_connection() {
         error_log('DB Connection Error: ' . $conn->connect_error);
         set_flash('error', 'Internal server error. Please try again later.');
         redirect('login.php');
-        exit();
     }
     $conn->set_charset('utf8mb4');
     return $conn;
