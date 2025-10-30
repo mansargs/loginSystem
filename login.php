@@ -1,12 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 generate_csrf_token();
-
-$flash = '';
-if(isset($_SERVER['alert'])) {
-    echo $_SERVER['alert'];
-    unset($_SERVER['alert']);
-}
+$flash = get_flash();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,13 +12,19 @@ if(isset($_SERVER['alert'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form action="login_handler.php" method="post" id="login-form">
-        <input type="text" id="username" name="username" placeholder="Username" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
-        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-        <input type="submit" value="Login">
-        <a href="index.php">Don't have an account? Register here</a>
-    </form>
+    <div class="container">
+        <h2>Login</h2>
+        <?php if ($flash): ?>
+            <p class="flash <?php echo $flash['type']; ?>"><?php echo htmlspecialchars($flash['message']); ?></p>
+        <?php endif; ?>
+        <form action="login_handler.php" method="post" id="login-form">
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+            <button type="submit">Login</button>
+        </form>
+        <p><a href="index.php">Don't have an account? Register here</a></p>
+    </div>
     <script>
         document.getElementById('login-form').addEventListener('submit', function(e) {
             const username = document.getElementById('username').value.trim();

@@ -2,8 +2,8 @@
 require_once __DIR__ . '/config.php';
 
 if (!isset($_GET['token']) || empty($_GET['token'])) {
-    $_SESSION['error'] = '<script>alert(Invalid verification link.)</script>';
-    header('Location: login.php');
+    set_flash('error', 'Invalid verification link.');
+    redirect('login.php');
     exit;
 }
 
@@ -19,18 +19,18 @@ $stmt->close();
 
 if (!$user) {
     $conn->close();
-    $_SESSION['flash_error'] = 'Invalid or expired verification token.';
-    header('Location: login.php');
+    set_flash('error', 'Invalid or expired verification token.');
+    redirect('login.php');
     exit;
 }
 
-// Check 24h expiry from creation
+// Check 24h expiry
 $created_at = new DateTime($user['created_at']);
 $now = new DateTime();
 if (($now->getTimestamp() - $created_at->getTimestamp()) > (24 * 60 * 60)) {
     $conn->close();
-    $_SESSION['flash_error'] = 'Verification token has expired. Please register again.';
-    header('Location: index.php');
+    set_flash('error', 'Verification token has expired. Please register again.');
+    redirect('index.php');
     exit;
 }
 
@@ -39,23 +39,13 @@ $update_stmt->bind_param('i', $user['id']);
 $update_stmt->execute();
 $update_stmt->close();
 
+// Auto-login after verification
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['username'] = $user['username']; // Fetch username separately if needed
+session_regenerate_id(true);
+
 $conn->close();
-$_SESSION['reg_success'] = 'Email verified successfully!';
-header('Location: dashboard.php');  // Auto-login? No, redirect to login for now
+set_flash('success', 'Email verified successfully! Welcome aboard.');
+redirect('dashboard.php');
 exit;
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verified</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div style="display: flex; flex-direction: column; align-items: center; padding: 50px; text-align: center;">
-        <h2>Email Verified Successfully!</h2>
-        <p>You can now <a href="login.php">log in</a> to your account.</p>
-    </div>
-</body>
-</html>

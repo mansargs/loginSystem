@@ -1,11 +1,7 @@
 <?php
-// session_start();
 require_once __DIR__ . '/config.php';
 generate_csrf_token();
-if(isset($_SERVER['alert'])) {
-    echo $_SERVER['alert'];
-    unset($_SERVER['alert']);
-}
+$flash = get_flash();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,16 +12,21 @@ if(isset($_SERVER['alert'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php echo $flash; ?>
-    <form action="register.php" method="post" id="reg-form">
-        <input type="text" id="username" name="username" placeholder="Username" required>
-        <input type="email" name="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
-        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
-        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-        <input type="submit" value="Register">
-        <a href="login.php">Already have an account? Login here</a>
-    </form>
+    <div class="container">
+        <h2>Register</h2>
+        <?php if ($flash): ?>
+            <p class="flash <?php echo $flash['type']; ?>"><?php echo htmlspecialchars($flash['message']); ?></p>
+        <?php endif; ?>
+        <form action="register.php" method="post" id="reg-form">
+            <input type="text" id="username" name="username" placeholder="Username" required maxlength="24">
+            <input type="email" name="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Password" required minlength="8" maxlength="64">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+            <button type="submit">Register</button>
+        </form>
+        <p><a href="login.php">Already have an account? Login here</a></p>
+    </div>
     <script>
         document.getElementById('reg-form').addEventListener('submit', function(e) {
             const username = document.getElementById('username').value.trim();
